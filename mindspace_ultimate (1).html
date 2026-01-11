@@ -1,0 +1,3287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Helium AI">
+    <meta name="description" content="MindSpace - Complete AI-Powered Government School Platform with ALL Features">
+    <title>MindSpace - Ultimate Government School System</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --light-bg: #f8fafc;
+            --white: #ffffff;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light-bg);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, transparent 50%),
+                linear-gradient(225deg, rgba(124, 58, 237, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--white);
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo i {
+            font-size: 32px;
+            color: var(--secondary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .translate-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .translate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--text-gray);
+            transition: all 0.3s;
+        }
+
+        .notification-bell:hover {
+            color: var(--primary);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 8px 15px;
+            background: var(--light-bg);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 280px;
+            height: calc(100vh - 70px);
+            background: var(--white);
+            border-right: 2px solid var(--border);
+            padding: 30px 0;
+            overflow-y: auto;
+            z-index: 999;
+            transition: all 0.3s;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar-toggle {
+            position: absolute;
+            top: 20px;
+            right: -15px;
+            width: 30px;
+            height: 30px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            color: white;
+        }
+
+        .menu-section-title {
+            padding: 10px 30px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-gray);
+            text-transform: uppercase;
+        }
+
+        .sidebar.collapsed .menu-section-title {
+            display: none;
+        }
+
+        .menu-item {
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            color: var(--text-gray);
+        }
+
+        .menu-item:hover {
+            background: var(--light-bg);
+            border-left-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(37, 99, 235, 0.1), transparent);
+            border-left-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .menu-item i {
+            font-size: 20px;
+            width: 24px;
+        }
+
+        .sidebar.collapsed .menu-item span {
+            display: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            margin-top: 70px;
+            padding: 40px;
+            min-height: calc(100vh - 70px);
+            transition: all 0.3s;
+        }
+
+        .sidebar.collapsed ~ .main-content {
+            margin-left: 80px;
+        }
+
+        /* Login */
+        .login-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 50px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+
+        .login-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .login-subtitle {
+            color: var(--text-gray);
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .role-selector-login {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .role-option {
+            padding: 20px;
+            background: var(--light-bg);
+            border: 2px solid var(--border);
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .role-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+        }
+
+        .role-option.selected {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1));
+            border-color: var(--primary);
+        }
+
+        .role-option i {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        /* Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-dark);
+        }
+
+        .card-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+        }
+
+        .stat-value {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 15px 0;
+        }
+
+        .stat-label {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--light-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--light-bg);
+            border: 1px solid var(--border);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Input Fields */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 20px;
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-dark);
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        select.input-field {
+            cursor: pointer;
+            appearance: none;
+            background-color: var(--white);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232563eb' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 40px;
+        }
+
+        select.input-field option {
+            background: var(--white);
+            color: var(--text-dark);
+            padding: 10px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        textarea.input-field {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table th {
+            background: var(--light-bg);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .data-table tr:hover {
+            background: var(--light-bg);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* Hero */
+        .hero-section {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-gray);
+            margin-bottom: 20px;
+        }
+
+        .school-image {
+            width: 100%;
+            max-width: 800px;
+            height: 300px;
+            margin: 20px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .school-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Chat */
+        .chat-container {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: white;
+        }
+
+        .chat-bubble {
+            background: var(--light-bg);
+            padding: 12px 18px;
+            border-radius: 15px;
+            max-width: 70%;
+            color: var(--text-dark);
+        }
+
+        .chat-message.user .chat-bubble {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed var(--border);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--light-bg);
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: var(--white);
+        }
+
+        .file-upload i {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        /* Generated Content */
+        .generated-content {
+            background: rgba(37, 99, 235, 0.05);
+            border: 1px solid var(--primary);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* Quiz */
+        .quiz-card {
+            background: var(--light-bg);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            padding: 12px 20px;
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: translateX(10px);
+        }
+
+        /* Resource Card */
+        .resource-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .resource-card:hover {
+            transform: translateX(10px);
+            border-color: var(--primary);
+            box-shadow: 0 5px 20px rgba(37, 99, 235, 0.2);
+        }
+
+        .resource-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        /* Section */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Alert */
+        .alert-box {
+            position: fixed;
+            top: 90px;
+            right: 30px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 400px;
+            box-shadow: 0 10px 40px var(--shadow);
+            z-index: 1001;
+            display: none;
+        }
+
+        .alert-box.show {
+            display: block;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .alert-box.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .alert-box.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        /* Calculator */
+        .floating-calculator {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 320px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 50px var(--shadow);
+            z-index: 1000;
+            display: none;
+        }
+
+        .floating-calculator.active {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .calc-mode-selector {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .calc-mode-btn {
+            padding: 8px 12px;
+            background: var(--light-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            color: var(--text-dark);
+        }
+
+        .calc-mode-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .calc-display {
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: right;
+            font-size: 24px;
+            margin-bottom: 15px;
+            min-height: 60px;
+            color: var(--text-dark);
+            border: 2px solid var(--border);
+        }
+
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .calc-btn {
+            padding: 20px;
+            background: var(--light-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .calc-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .calc-btn.operator {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        /* FAB */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4);
+            transition: all 0.3s;
+            z-index: 999;
+            color: white;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* Chart */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Notification Panel */
+        .notification-panel {
+            position: fixed;
+            top: 70px;
+            right: -400px;
+            width: 400px;
+            height: calc(100vh - 70px);
+            background: var(--white);
+            border-left: 2px solid var(--border);
+            padding: 30px;
+            overflow-y: auto;
+            z-index: 998;
+            transition: all 0.3s;
+            box-shadow: -5px 0 20px var(--shadow);
+        }
+
+        .notification-panel.active {
+            right: 0;
+        }
+
+        .notification-item {
+            background: var(--light-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .notification-item:hover {
+            background: var(--white);
+            border-color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+            }
+
+            .sidebar .menu-item span,
+            .sidebar .menu-section-title {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 80px;
+                padding: 20px;
+            }
+
+            .hero-title {
+                font-size: 28px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .floating-calculator {
+                width: calc(100% - 40px);
+                right: 20px;
+            }
+
+            .notification-panel {
+                width: 100%;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <div class="login-logo">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h1 class="login-title" data-en="MindSpace" data-kn="ಮೈಂಡ್‌ಸ್ಪೇಸ್">MindSpace</h1>
+            <p class="login-subtitle" data-en="AI-Powered Government School Platform" data-kn="AI-ಚಾಲಿತ ಸರ್ಕಾರಿ ಶಾಲಾ ವೇದಿಕೆ">AI-Powered Government School Platform</p>
+            
+            <div class="role-selector-login">
+                <div class="role-option" onclick="selectRole('admin')">
+                    <i class="fas fa-user-shield"></i>
+                    <h4 data-en="Admin" data-kn="ನಿರ್ವಾಹಕ">Admin</h4>
+                </div>
+                <div class="role-option" onclick="selectRole('principal')">
+                    <i class="fas fa-user-tie"></i>
+                    <h4 data-en="Principal" data-kn="ಪ್ರಾಂಶುಪಾಲರು">Principal</h4>
+                </div>
+                <div class="role-option" onclick="selectRole('teacher')">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h4 data-en="Teacher" data-kn="ಶಿಕ್ಷಕರು">Teacher</h4>
+                </div>
+                <div class="role-option" onclick="selectRole('student')">
+                    <i class="fas fa-user-graduate"></i>
+                    <h4 data-en="Student" data-kn="ವಿದ್ಯಾರ್ಥಿ">Student</h4>
+                </div>
+                <div class="role-option" onclick="selectRole('parent')">
+                    <i class="fas fa-users"></i>
+                    <h4 data-en="Parent" data-kn="ಪೋಷಕರು">Parent</h4>
+                </div>
+                <div class="role-option" onclick="selectRole('government')">
+                    <i class="fas fa-landmark"></i>
+                    <h4 data-en="Government" data-kn="ಸರ್ಕಾರ">Government</h4>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" data-en="Username / ID" data-kn="ಬಳಕೆದಾರ ಹೆಸರು / ಐಡಿ">Username / ID</label>
+                <input type="text" class="input-field" id="loginUsername" placeholder="Enter ID">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" data-en="Password" data-kn="ಗುಪ್ತಪದ">Password</label>
+                <input type="password" class="input-field" id="loginPassword" placeholder="Enter password">
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%;" onclick="login()">
+                <i class="fas fa-sign-in-alt"></i>
+                <span data-en="Login" data-kn="ಲಾಗಿನ್">Login</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar" style="display: none;" id="navbar">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span data-en="MindSpace" data-kn="ಮೈಂಡ್‌ಸ್ಪೇಸ್">MindSpace</span>
+        </div>
+        <div class="nav-actions">
+            <button class="translate-btn" onclick="toggleLanguage()">
+                <i class="fas fa-language"></i>
+                <span id="langText">English</span>
+            </button>
+            <div class="notification-bell" onclick="toggleNotifications()">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">12</span>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <span id="userName">User</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar" style="display: none;">
+        <div class="sidebar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-chevron-left" id="sidebarIcon"></i>
+        </div>
+        <div id="sidebarMenu"></div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent" style="display: none;">
+        <!-- Dashboard -->
+        <div class="section active" id="dashboard">
+            <div class="hero-section">
+                <h1 class="hero-title" data-en="Welcome to MindSpace" data-kn="ಮೈಂಡ್‌ಸ್ಪೇಸ್‌ಗೆ ಸ್ವಾಗತ">Welcome to MindSpace</h1>
+                <p class="hero-subtitle" id="roleSubtitle">AI-Powered Government School System</p>
+                <div class="school-image">
+                    <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&h=300&fit=crop" alt="Government School" onerror="this.src='https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&h=300&fit=crop'">
+                </div>
+            </div>
+            <div id="dashboardContent"></div>
+        </div>
+
+        <!-- Attendance -->
+        <div class="section" id="attendance">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-calendar-check"></i>
+                <span data-en="Digital Attendance System" data-kn="ಡಿಜಿಟಲ್ ಹಾಜರಾತಿ ವ್ಯವಸ್ಥೆ">Digital Attendance System</span>
+            </h2>
+            
+            <div class="card">
+                <div class="dashboard-grid">
+                    <div class="input-group">
+                        <label class="input-label" data-en="Select Class" data-kn="ತರಗತಿ ಆಯ್ಕೆಮಾಡಿ">Select Class</label>
+                        <select class="input-field" id="attendanceClass">
+                            <option>Class 1</option>
+                            <option>Class 2</option>
+                            <option>Class 3</option>
+                            <option>Class 4</option>
+                            <option>Class 5</option>
+                            <option>Class 6</option>
+                            <option>Class 7</option>
+                            <option>Class 8</option>
+                            <option>Class 9</option>
+                            <option>Class 10</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Date" data-kn="ದಿನಾಂಕ">Date</label>
+                        <input type="date" class="input-field" id="attendanceDate">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Section" data-kn="ವಿಭಾಗ">Section</label>
+                        <select class="input-field" id="attendanceSection">
+                            <option>Section A</option>
+                            <option>Section B</option>
+                            <option>Section C</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="loadAttendance()">
+                    <i class="fas fa-search"></i>
+                    <span data-en="Load Students" data-kn="ವಿದ್ಯಾರ್ಥಿಗಳನ್ನು ಲೋಡ್ ಮಾಡಿ">Load Students</span>
+                </button>
+            </div>
+
+            <div class="card" style="margin-top: 30px; display: none;" id="attendanceTableContainer">
+                <h3 style="margin-bottom: 20px;">
+                    <span data-en="Mark Attendance" data-kn="ಹಾಜರಾತಿ ಗುರುತಿಸಿ">Mark Attendance</span>
+                </h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th data-en="Roll No" data-kn="ರೋಲ್ ಸಂಖ್ಯೆ">Roll No</th>
+                            <th data-en="Student Name" data-kn="ವಿದ್ಯಾರ್ಥಿ ಹೆಸರು">Student Name</th>
+                            <th data-en="Status" data-kn="ಸ್ಥಿತಿ">Status</th>
+                            <th data-en="Action" data-kn="ಕ್ರಿಯೆ">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTableBody"></tbody>
+                </table>
+                <button class="btn btn-success" style="margin-top: 20px;" onclick="saveAttendance()">
+                    <i class="fas fa-save"></i>
+                    <span data-en="Save & Send SMS Alerts" data-kn="ಉಳಿಸಿ ಮತ್ತು SMS ಎಚ್ಚರಿಕೆಗಳನ್ನು ಕಳುಹಿಸಿ">Save & Send SMS Alerts</span>
+                </button>
+            </div>
+
+            <div class="dashboard-grid" style="margin-top: 30px;">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Attendance Overview" data-kn="ಹಾಜರಾತಿ ಅವಲೋಕನ">Attendance Overview</span>
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="attendanceChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Monthly Trends" data-kn="ಮಾಸಿಕ ಪ್ರವೃತ್ತಿಗಳು">Monthly Trends</span>
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="attendanceTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Analytics -->
+        <div class="section" id="analytics">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-chart-line"></i>
+                <span data-en="Student Performance Analytics" data-kn="ವಿದ್ಯಾರ್ಥಿ ಕಾರ್ಯಕ್ಷಮತೆ ವಿಶ್ಲೇಷಣೆ">Student Performance Analytics</span>
+            </h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Select Student" data-kn="ವಿದ್ಯಾರ್ಥಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ">Select Student</span>
+                    </h3>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Class" data-kn="ತರಗತಿ">Class</label>
+                        <select class="input-field" id="analyticsClass">
+                            <option>Class 6</option>
+                            <option>Class 7</option>
+                            <option>Class 8</option>
+                            <option>Class 9</option>
+                            <option>Class 10</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Student" data-kn="ವಿದ್ಯಾರ್ಥಿ">Student</label>
+                        <select class="input-field" id="analyticsStudent">
+                            <option>Rahul Kumar - 001</option>
+                            <option>Priya Sharma - 002</option>
+                            <option>Amit Patel - 003</option>
+                            <option>Sneha Reddy - 004</option>
+                            <option>Vikram Singh - 005</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="loadAnalytics()">
+                        <i class="fas fa-chart-bar"></i>
+                        <span data-en="Generate Analytics" data-kn="ವಿಶ್ಲೇಷಣೆ ರಚಿಸಿ">Generate Analytics</span>
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Overall Performance" data-kn="ಒಟ್ಟಾರೆ ಕಾರ್ಯಕ್ಷಮತೆ">Overall Performance</span>
+                    </h3>
+                    <div class="stat-value">87%</div>
+                    <div class="stat-label" data-en="Average Score" data-kn="ಸರಾಸರಿ ಅಂಕ">Average Score</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 87%"></div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <span class="badge badge-success">Strong: Math</span>
+                        <span class="badge badge-warning">Improve: English</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid" style="margin-top: 30px;">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Progress Over Time" data-kn="ಕಾಲಾನಂತರದ ಪ್ರಗತಿ">Progress Over Time</span>
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Subject Comparison" data-kn="ವಿಷಯ ಹೋಲಿಕೆ">Subject Comparison</span>
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="subjectChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 30px;">
+                <h3 style="margin-bottom: 20px;">
+                    <span data-en="Attendance vs Performance" data-kn="ಹಾಜರಾತಿ ವಿರುದ್ಧ ಕಾರ್ಯಕ್ಷಮತೆ">Attendance vs Performance</span>
+                </h3>
+                <div class="chart-container">
+                    <canvas id="attendancePerformanceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 30px;">
+                <h3 style="margin-bottom: 20px;">
+                    <i class="fas fa-robot"></i>
+                    <span data-en="AI Analysis & Recommendations" data-kn="AI ವಿಶ್ಲೇಷಣೆ ಮತ್ತು ಶಿಫಾರಸುಗಳು">AI Analysis & Recommendations</span>
+                </h3>
+                <div class="generated-content">
+                    <p><strong data-en="Strengths:" data-kn="ಸಾಮರ್ಥ್ಯಗಳು:">Strengths:</strong></p>
+                    <ul style="margin-left: 20px; line-height: 1.8; margin-top: 10px;">
+                        <li data-en="Excellent problem-solving skills in Mathematics" data-kn="ಗಣಿತದಲ್ಲಿ ಅತ್ಯುತ್ತಮ ಸಮಸ್ಯೆ-ಪರಿಹಾರ ಕೌಶಲ್ಯಗಳು">Excellent problem-solving skills in Mathematics</li>
+                        <li data-en="Strong conceptual understanding in Science" data-kn="ವಿಜ್ಞಾನದಲ್ಲಿ ಬಲವಾದ ಪರಿಕಲ್ಪನಾ ತಿಳುವಳಿಕೆ">Strong conceptual understanding in Science</li>
+                        <li data-en="Consistent performance in practical subjects" data-kn="ಪ್ರಾಯೋಗಿಕ ವಿಷಯಗಳಲ್ಲಿ ಸ್ಥಿರ ಕಾರ್ಯಕ್ಷಮತೆ">Consistent performance in practical subjects</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong data-en="Areas for Improvement:" data-kn="ಸುಧಾರಣೆಗಾಗಿ ಕ್ಷೇತ್ರಗಳು:">Areas for Improvement:</strong></p>
+                    <ul style="margin-left: 20px; line-height: 1.8; margin-top: 10px;">
+                        <li data-en="Grammar and vocabulary in English" data-kn="ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ ವ್ಯಾಕರಣ ಮತ್ತು ಶಬ್ದಕೋಶ">Grammar and vocabulary in English</li>
+                        <li data-en="Time management during exams" data-kn="ಪರೀಕ್ಷೆಗಳ ಸಮಯದಲ್ಲಿ ಸಮಯ ನಿರ್ವಹಣೆ">Time management during exams</li>
+                        <li data-en="Regular revision needed for Social Studies" data-kn="ಸಾಮಾಜಿಕ ಅಧ್ಯಯನಕ್ಕೆ ನಿಯಮಿತ ಪರಿಷ್ಕರಣೆ ಅಗತ್ಯ">Regular revision needed for Social Studies</li>
+                    </ul>
+                    <button class="btn btn-primary" style="margin-top: 20px;" onclick="downloadReportCard()">
+                        <i class="fas fa-download"></i>
+                        <span data-en="Download Report Card (PDF)" data-kn="ವರದಿ ಕಾರ್ಡ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ (PDF)">Download Report Card (PDF)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes Hub -->
+        <div class="section" id="notes">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-book"></i>
+                <span data-en="MindSpace Notes Hub" data-kn="ಮೈಂಡ್‌ಸ್ಪೇಸ್ ಟಿಪ್ಪಣಿಗಳು ಕೇಂದ್ರ">MindSpace Notes Hub</span>
+            </h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Upload Notes" data-kn="ಟಿಪ್ಪಣಿಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ">Upload Notes</span>
+                    </h3>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Class" data-kn="ತರಗತಿ">Class</label>
+                        <select class="input-field" id="notesClass">
+                            <option>Class 6</option>
+                            <option>Class 7</option>
+                            <option>Class 8</option>
+                            <option>Class 9</option>
+                            <option>Class 10</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Subject" data-kn="ವಿಷಯ">Subject</label>
+                        <select class="input-field" id="notesSubject">
+                            <option data-en="Mathematics" data-kn="ಗಣಿತ">Mathematics</option>
+                            <option data-en="Science" data-kn="ವಿಜ್ಞಾನ">Science</option>
+                            <option data-en="English" data-kn="ಇಂಗ್ಲಿಷ್">English</option>
+                            <option data-en="Social Studies" data-kn="ಸಾಮಾಜಿಕ ಅಧ್ಯಯನ">Social Studies</option>
+                            <option data-en="Hindi" data-kn="ಹಿಂದಿ">Hindi</option>
+                            <option data-en="Kannada" data-kn="ಕನ್ನಡ">Kannada</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Chapter" data-kn="ಅಧ್ಯಾಯ">Chapter</label>
+                        <input type="text" class="input-field" id="notesChapter" placeholder="Enter chapter">
+                    </div>
+                    <div class="file-upload" onclick="document.getElementById('notesFile').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p data-en="Click to Upload Notes" data-kn="ಟಿಪ್ಪಣಿಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ಕ್ಲಿಕ್ ಮಾಡಿ">Click to Upload Notes</p>
+                        <p style="font-size: 14px; color: var(--text-gray);">PDF, DOCX, PPT, Images</p>
+                    </div>
+                    <input type="file" id="notesFile" style="display: none;" onchange="uploadNotes(this)">
+                    <div id="notesUploadStatus"></div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Browse & Download Notes" data-kn="ಟಿಪ್ಪಣಿಗಳನ್ನು ಬ್ರೌಸ್ ಮಾಡಿ ಮತ್ತು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ">Browse & Download Notes</span>
+                    </h3>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Class" data-kn="ತರಗತಿ">Class</label>
+                        <select class="input-field" id="browseClass">
+                            <option>Class 6</option>
+                            <option>Class 7</option>
+                            <option>Class 8</option>
+                            <option>Class 9</option>
+                            <option>Class 10</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Subject" data-kn="ವಿಷಯ">Subject</label>
+                        <select class="input-field" id="browseSubject">
+                            <option data-en="Mathematics" data-kn="ಗಣಿತ">Mathematics</option>
+                            <option data-en="Science" data-kn="ವಿಜ್ಞಾನ">Science</option>
+                            <option data-en="English" data-kn="ಇಂಗ್ಲಿಷ್">English</option>
+                            <option data-en="Social Studies" data-kn="ಸಾಮಾಜಿಕ ಅಧ್ಯಯನ">Social Studies</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="browseNotes()">
+                        <i class="fas fa-search"></i>
+                        <span data-en="Search Notes" data-kn="ಟಿಪ್ಪಣಿಗಳನ್ನು ಹುಡುಕಿ">Search Notes</span>
+                    </button>
+                    <div id="notesResults"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Generator -->
+        <div class="section" id="quiz">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-question-circle"></i>
+                <span data-en="Quizzz Buzz - AI Quiz Generator" data-kn="ಕ್ವಿಜ್ ಬಜ್ - AI ಕ್ವಿಜ್ ಜನರೇಟರ್">Quizzz Buzz - AI Quiz Generator</span>
+            </h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Generate Quiz from PDF" data-kn="PDF ನಿಂದ ಕ್ವಿಜ್ ರಚಿಸಿ">Generate Quiz from PDF</span>
+                    </h3>
+                    <div class="file-upload" onclick="document.getElementById('quizFile').click()">
+                        <i class="fas fa-file-pdf"></i>
+                        <p data-en="Upload Textbook/Notes PDF" data-kn="ಪಠ್ಯಪುಸ್ತಕ/ಟಿಪ್ಪಣಿಗಳ PDF ಅಪ್‌ಲೋಡ್ ಮಾಡಿ">Upload Textbook/Notes PDF</p>
+                        <p style="font-size: 14px; color: var(--text-gray);">AI will analyze and create quiz</p>
+                    </div>
+                    <input type="file" id="quizFile" style="display: none;" accept=".pdf" onchange="handleQuizFile(this)">
+                    
+                    <div class="input-group" style="margin-top: 20px;">
+                        <label class="input-label" data-en="Number of Questions" data-kn="ಪ್ರಶ್ನೆಗಳ ಸಂಖ್ಯೆ">Number of Questions</label>
+                        <select class="input-field" id="quizQuestions">
+                            <option>5</option>
+                            <option>10</option>
+                            <option>15</option>
+                            <option>20</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Options per Question" data-kn="ಪ್ರತಿ ಪ್ರಶ್ನೆಗೆ ಆಯ್ಕೆಗಳು">Options per Question</label>
+                        <select class="input-field" id="quizOptions">
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Difficulty Level" data-kn="ಕಷ್ಟತೆಯ ಮಟ್ಟ">Difficulty Level</label>
+                        <select class="input-field" id="quizDifficulty">
+                            <option data-en="Easy" data-kn="ಸುಲಭ">Easy</option>
+                            <option data-en="Medium" data-kn="ಮಧ್ಯಮ">Medium</option>
+                            <option data-en="Hard" data-kn="ಕಠಿಣ">Hard</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="generateQuiz()">
+                        <i class="fas fa-magic"></i>
+                        <span data-en="Generate Quiz" data-kn="ಕ್ವಿಜ್ ರಚಿಸಿ">Generate Quiz</span>
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Quiz Preview" data-kn="ಕ್ವಿಜ್ ಪೂರ್ವವೀಕ್ಷಣೆ">Quiz Preview</span>
+                    </h3>
+                    <div id="quizPreview">
+                        <p style="color: var(--text-gray); text-align: center; padding: 40px;">
+                            <span data-en="Upload PDF and generate quiz to see preview" data-kn="PDF ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ಮತ್ತು ಪೂರ್ವವೀಕ್ಷಣೆ ನೋಡಲು ಕ್ವಿಜ್ ರಚಿಸಿ">Upload PDF and generate quiz to see preview</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Assistant -->
+        <div class="section" id="ai-assistant">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-robot"></i>
+                <span data-en="AI Learning Assistant" data-kn="AI ಕಲಿಕಾ ಸಹಾಯಕ">AI Learning Assistant</span>
+            </h2>
+            
+            <div class="card">
+                <div style="background: rgba(37, 99, 235, 0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                    <p style="font-size: 14px;">
+                        <i class="fas fa-info-circle" style="color: var(--primary);"></i>
+                        <span data-en="This AI assistant can answer doubts, explain concepts, generate examples, and help with homework in both English and Kannada." data-kn="ಈ AI ಸಹಾಯಕವು ಸಂದೇಹಗಳಿಗೆ ಉತ್ತರಿಸಬಹುದು, ಪರಿಕಲ್ಪನೆಗಳನ್ನು ವಿವರಿಸಬಹುದು, ಉದಾಹರಣೆಗಳನ್ನು ರಚಿಸಬಹುದು ಮತ್ತು ಇಂಗ್ಲಿಷ್ ಮತ್ತು ಕನ್ನಡ ಎರಡರಲ್ಲೂ ಮನೆಕೆಲಸಕ್ಕೆ ಸಹಾಯ ಮಾಡಬಹುದು.">This AI assistant can answer doubts, explain concepts, generate examples, and help with homework in both English and Kannada.</span>
+                    </p>
+                </div>
+                
+                <div class="chat-container" style="height: 600px;">
+                    <div class="chat-messages" id="aiChatMessages">
+                        <div class="chat-message">
+                            <div class="chat-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="chat-bubble">
+                                <span data-en="Hello! I'm your AI learning assistant. I can help you with any subject - Math, Science, English, Social Studies, and more. Ask me anything!" data-kn="ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ AI ಕಲಿಕಾ ಸಹಾಯಕ. ನಾನು ಯಾವುದೇ ವಿಷಯದಲ್ಲಿ ನಿಮಗೆ ಸಹಾಯ ಮಾಡಬಲ್ಲೆ - ಗಣಿತ, ವಿಜ್ಞಾನ, ಇಂಗ್ಲಿಷ್, ಸಾಮಾಜಿಕ ಅಧ್ಯಯನ ಮತ್ತು ಹೆಚ್ಚಿನವು. ನನಗೆ ಏನು ಬೇಕಾದರೂ ಕೇಳಿ!">Hello! I'm your AI learning assistant. I can help you with any subject - Math, Science, English, Social Studies, and more. Ask me anything!</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" class="input-field" id="aiChatInput" placeholder="Ask me anything..." onkeypress="handleAIChatEnter(event)" style="flex: 1;">
+                        <button class="btn btn-primary" onclick="sendAIChat()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Notes Generator -->
+        <div class="section" id="ai-notes">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-file-alt"></i>
+                <span data-en="AI Notes & Question Paper Generator" data-kn="AI ಟಿಪ್ಪಣಿಗಳು ಮತ್ತು ಪ್ರಶ್ನೆ ಪತ್ರ ಜನರೇಟರ್">AI Notes & Question Paper Generator</span>
+            </h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Generate Notes from Textbook" data-kn="ಪಠ್ಯಪುಸ್ತಕದಿಂದ ಟಿಪ್ಪಣಿಗಳನ್ನು ರಚಿಸಿ">Generate Notes from Textbook</span>
+                    </h3>
+                    <div class="file-upload" onclick="document.getElementById('textbookFile').click()">
+                        <i class="fas fa-book"></i>
+                        <p data-en="Upload Textbook Photo/PDF" data-kn="ಪಠ್ಯಪುಸ್ತಕ ಫೋಟೋ/PDF ಅಪ್‌ಲೋಡ್ ಮಾಡಿ">Upload Textbook Photo/PDF</p>
+                    </div>
+                    <input type="file" id="textbookFile" style="display: none;" onchange="handleTextbookUpload(this)">
+                    
+                    <div class="input-group" style="margin-top: 20px;">
+                        <label class="input-label" data-en="Topic/Chapter" data-kn="ವಿಷಯ/ಅಧ್ಯಾಯ">Topic/Chapter</label>
+                        <input type="text" class="input-field" id="aiNotesTopic" placeholder="Enter topic">
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="generateAINotes()">
+                        <i class="fas fa-magic"></i>
+                        <span data-en="Generate Chapter Notes" data-kn="ಅಧ್ಯಾಯ ಟಿಪ್ಪಣಿಗಳನ್ನು ರಚಿಸಿ">Generate Chapter Notes</span>
+                    </button>
+                    <div id="aiNotesOutput"></div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Question Paper Creator" data-kn="ಪ್ರಶ್ನೆ ಪತ್ರ ರಚನೆಕಾರ">Question Paper Creator</span>
+                    </h3>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Subject" data-kn="ವಿಷಯ">Subject</label>
+                        <select class="input-field" id="qpSubject">
+                            <option>Mathematics</option>
+                            <option>Science</option>
+                            <option>English</option>
+                            <option>Social Studies</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Class" data-kn="ತರಗತಿ">Class</label>
+                        <select class="input-field" id="qpClass">
+                            <option>Class 6</option>
+                            <option>Class 7</option>
+                            <option>Class 8</option>
+                            <option>Class 9</option>
+                            <option>Class 10</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Type Questions (or use voice)" data-kn="ಪ್ರಶ್ನೆಗಳನ್ನು ಟೈಪ್ ಮಾಡಿ (ಅಥವಾ ಧ್ವನಿ ಬಳಸಿ)">Type Questions (or use voice)</label>
+                        <textarea class="input-field" id="qpQuestions" placeholder="Type questions or click voice button..."></textarea>
+                    </div>
+                    <button class="btn btn-secondary" onclick="startVoiceInput()">
+                        <i class="fas fa-microphone"></i>
+                        <span data-en="Voice Input" data-kn="ಧ್ವನಿ ಇನ್‌ಪುಟ್">Voice Input</span>
+                    </button>
+                    <button class="btn btn-primary" style="margin-left: 10px;" onclick="generateQuestionPaper()">
+                        <i class="fas fa-file-alt"></i>
+                        <span data-en="Generate Paper" data-kn="ಪೇಪರ್ ರಚಿಸಿ">Generate Paper</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assignments -->
+        <div class="section" id="assignments">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-tasks"></i>
+                <span data-en="Online Assignment System" data-kn="ಆನ್‌ಲೈನ್ ಅಸೈನ್‌ಮೆಂಟ್ ವ್ಯವಸ್ಥೆ">Online Assignment System</span>
+            </h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Create Assignment" data-kn="ಅಸೈನ್‌ಮೆಂಟ್ ರಚಿಸಿ">Create Assignment</span>
+                    </h3>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Class" data-kn="ತರಗತಿ">Class</label>
+                        <select class="input-field" id="assignmentClass">
+                            <option>Class 6</option>
+                            <option>Class 7</option>
+                            <option>Class 8</option>
+                            <option>Class 9</option>
+                            <option>Class 10</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Subject" data-kn="ವಿಷಯ">Subject</label>
+                        <select class="input-field" id="assignmentSubject">
+                            <option>Mathematics</option>
+                            <option>Science</option>
+                            <option>English</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Assignment Title" data-kn="ಅಸೈನ್‌ಮೆಂಟ್ ಶೀರ್ಷಿಕೆ">Assignment Title</label>
+                        <input type="text" class="input-field" id="assignmentTitle" placeholder="Enter title">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Due Date" data-kn="ಅಂತಿಮ ದಿನಾಂಕ">Due Date</label>
+                        <input type="date" class="input-field" id="assignmentDue">
+                    </div>
+                    <div class="file-upload" onclick="document.getElementById('assignmentFile').click()">
+                        <i class="fas fa-upload"></i>
+                        <p data-en="Upload Assignment File" data-kn="ಅಸೈನ್‌ಮೆಂಟ್ ಫೈಲ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ">Upload Assignment File</p>
+                    </div>
+                    <input type="file" id="assignmentFile" style="display: none;" onchange="uploadAssignment(this)">
+                    <button class="btn btn-primary" style="margin-top: 15px;" onclick="postAssignment()">
+                        <i class="fas fa-paper-plane"></i>
+                        <span data-en="Post Assignment" data-kn="ಅಸೈನ್‌ಮೆಂಟ್ ಪೋಸ್ಟ್ ಮಾಡಿ">Post Assignment</span>
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="My Assignments" data-kn="ನನ್ನ ಅಸೈನ್‌ಮೆಂಟ್‌ಗಳು">My Assignments</span>
+                    </h3>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="padding: 15px; background: var(--light-bg); border-radius: 10px; border-left: 4px solid var(--warning);">
+                            <strong>Math Assignment - Chapter 5</strong>
+                            <p style="font-size: 14px; color: var(--text-gray); margin-top: 5px;">Due: Dec 20, 2025</p>
+                            <span class="badge badge-warning">Pending</span>
+                            <button class="btn btn-secondary" style="margin-top: 10px;">
+                                <i class="fas fa-upload"></i> Submit
+                            </button>
+                        </div>
+                        <div style="padding: 15px; background: var(--light-bg); border-radius: 10px; border-left: 4px solid var(--success);">
+                            <strong>Science Project</strong>
+                            <p style="font-size: 14px; color: var(--text-gray); margin-top: 5px;">Submitted: Dec 10, 2025</p>
+                            <span class="badge badge-success">Completed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student-Teacher Chat -->
+        <div class="section" id="chat">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-comments"></i>
+                <span data-en="Student-Teacher Chat" data-kn="ವಿದ್ಯಾರ್ಥಿ-ಶಿಕ್ಷಕರ ಚಾಟ್">Student-Teacher Chat</span>
+            </h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Select Teacher" data-kn="ಶಿಕ್ಷಕರನ್ನು ಆಯ್ಕೆಮಾಡಿ">Select Teacher</span>
+                    </h3>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Teacher" data-kn="ಶಿಕ್ಷಕರು">Teacher</label>
+                        <select class="input-field" id="chatTeacher">
+                            <option>Mr. Ramesh Kumar - Mathematics</option>
+                            <option>Mrs. Priya Sharma - Science</option>
+                            <option>Ms. Anjali Patel - English</option>
+                            <option>Mr. Suresh Reddy - Social Studies</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="startTeacherChat()">
+                        <i class="fas fa-comment"></i>
+                        <span data-en="Start Chat" data-kn="ಚಾಟ್ ಪ್ರಾರಂಭಿಸಿ">Start Chat</span>
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <div class="chat-container" style="height: 400px;">
+                        <div class="chat-messages" id="teacherChatMessages">
+                            <p style="color: var(--text-gray); text-align: center; padding: 40px;">
+                                <span data-en="Select a teacher to start chatting" data-kn="ಚಾಟ್ ಪ್ರಾರಂಭಿಸಲು ಶಿಕ್ಷಕರನ್ನು ಆಯ್ಕೆಮಾಡಿ">Select a teacher to start chatting</span>
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" class="input-field" id="teacherChatInput" placeholder="Type message..." style="flex: 1;">
+                            <button class="btn btn-primary" onclick="sendTeacherChat()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Helpline -->
+        <div class="section" id="helpline">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-exclamation-circle"></i>
+                <span data-en="Student Helpline & Complaint System" data-kn="ವಿದ್ಯಾರ್ಥಿ ಸಹಾಯವಾಣಿ ಮತ್ತು ದೂರು ವ್ಯವಸ್ಥೆ">Student Helpline & Complaint System</span>
+            </h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Report an Issue" data-kn="ಸಮಸ್ಯೆಯನ್ನು ವರದಿ ಮಾಡಿ">Report an Issue</span>
+                    </h3>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Issue Type" data-kn="ಸಮಸ್ಯೆ ಪ್ರಕಾರ">Issue Type</label>
+                        <select class="input-field" id="issueType">
+                            <option data-en="Teacher Related" data-kn="ಶಿಕ್ಷಕರ ಸಂಬಂಧಿತ">Teacher Related</option>
+                            <option data-en="Infrastructure" data-kn="ಮೂಲಸೌಕರ್ಯ">Infrastructure</option>
+                            <option data-en="Safety Concern" data-kn="ಸುರಕ್ಷತಾ ಕಾಳಜಿ">Safety Concern</option>
+                            <option data-en="Bullying" data-kn="ಬೆದರಿಸುವಿಕೆ">Bullying</option>
+                            <option data-en="Other" data-kn="ಇತರೆ">Other</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Description" data-kn="ವಿವರಣೆ">Description</label>
+                        <textarea class="input-field" id="issueDescription" placeholder="Describe the issue in detail..."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="anonymousReport">
+                            <span data-en="Report Anonymously (Your identity will be protected)" data-kn="ಅನಾಮಧೇಯವಾಗಿ ವರದಿ ಮಾಡಿ (ನಿಮ್ಮ ಗುರುತನ್ನು ರಕ್ಷಿಸಲಾಗುತ್ತದೆ)">Report Anonymously (Your identity will be protected)</span>
+                        </label>
+                    </div>
+                    <button class="btn btn-danger" onclick="submitComplaint()">
+                        <i class="fas fa-paper-plane"></i>
+                        <span data-en="Submit Complaint" data-kn="ದೂರು ಸಲ್ಲಿಸಿ">Submit Complaint</span>
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Your Complaints Status" data-kn="ನಿಮ್ಮ ದೂರುಗಳ ಸ್ಥಿತಿ">Your Complaints Status</span>
+                    </h3>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="padding: 15px; background: var(--light-bg); border-radius: 10px; border-left: 4px solid var(--warning);">
+                            <strong>Infrastructure - Broken Bench</strong>
+                            <p style="font-size: 14px; color: var(--text-gray); margin-top: 5px;">Reported: Dec 10, 2025</p>
+                            <span class="badge badge-warning">Under Review</span>
+                        </div>
+                        <div style="padding: 15px; background: var(--light-bg); border-radius: 10px; border-left: 4px solid var(--success);">
+                            <strong>Safety - Playground Issue</strong>
+                            <p style="font-size: 14px; color: var(--text-gray); margin-top: 5px;">Resolved: Dec 8, 2025</p>
+                            <span class="badge badge-success">Resolved</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Government Resources -->
+        <div class="section" id="resources">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-landmark"></i>
+                <span data-en="Government Learning Resources Hub" data-kn="ಸರ್ಕಾರಿ ಕಲಿಕಾ ಸಂಪನ್ಮೂಲಗಳ ಕೇಂದ್ರ">Government Learning Resources Hub</span>
+            </h2>
+            
+            <div class="card" style="margin-bottom: 30px;">
+                <h3 style="margin-bottom: 20px;">
+                    <span data-en="Select Learning Parameters" data-kn="ಕಲಿಕಾ ನಿಯತಾಂಕಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ">Select Learning Parameters</span>
+                </h3>
+                <div class="dashboard-grid">
+                    <div class="input-group">
+                        <label class="input-label" data-en="Class" data-kn="ತರಗತಿ">Class</label>
+                        <select class="input-field" id="resourceClass">
+                            <option>Class 6</option>
+                            <option>Class 7</option>
+                            <option>Class 8</option>
+                            <option>Class 9</option>
+                            <option>Class 10</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Subject" data-kn="ವಿಷಯ">Subject</label>
+                        <select class="input-field" id="resourceSubject">
+                            <option>Mathematics</option>
+                            <option>Science</option>
+                            <option>English</option>
+                            <option>Social Studies</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Chapter" data-kn="ಅಧ್ಯಾಯ">Chapter</label>
+                        <input type="text" class="input-field" id="resourceChapter" placeholder="Enter chapter">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="loadGovernmentResources()">
+                    <i class="fas fa-search"></i>
+                    <span data-en="Find All Resources" data-kn="ಎಲ್ಲಾ ಸಂಪನ್ಮೂಲಗಳನ್ನು ಹುಡುಕಿ">Find All Resources</span>
+                </button>
+            </div>
+
+            <div id="governmentResourcesContainer"></div>
+        </div>
+
+        <!-- Multi-Perspective Answers -->
+        <div class="section" id="multi-answers">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-lightbulb"></i>
+                <span data-en="Multi-Perspective AI Answer Generator" data-kn="ಬಹು-ದೃಷ್ಟಿಕೋನ AI ಉತ್ತರ ಜನರೇಟರ್">Multi-Perspective AI Answer Generator</span>
+            </h2>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 20px;">
+                    <span data-en="Enter Your Question" data-kn="ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ನಮೂದಿಸಿ">Enter Your Question</span>
+                </h3>
+                <div class="input-group">
+                    <label class="input-label" data-en="Question" data-kn="ಪ್ರಶ್ನೆ">Question</label>
+                    <textarea class="input-field" id="multiAnswerQuestion" placeholder="Type your question here..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="generateMultiAnswers()">
+                    <i class="fas fa-magic"></i>
+                    <span data-en="Generate Multiple Explanations" data-kn="ಬಹು ವಿವರಣೆಗಳನ್ನು ರಚಿಸಿ">Generate Multiple Explanations</span>
+                </button>
+                <div id="multiAnswersOutput"></div>
+            </div>
+        </div>
+
+        <!-- Learning Games -->
+        <div class="section" id="games">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-gamepad"></i>
+                <span data-en="AI-Generated Learning Games" data-kn="AI-ರಚಿತ ಕಲಿಕಾ ಆಟಗಳು">AI-Generated Learning Games</span>
+            </h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Generate Learning Game" data-kn="ಕಲಿಕಾ ಆಟವನ್ನು ರಚಿಸಿ">Generate Learning Game</span>
+                    </h3>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Class" data-kn="ತರಗತಿ">Class</label>
+                        <select class="input-field" id="gameClass">
+                            <option>Class 6</option>
+                            <option>Class 7</option>
+                            <option>Class 8</option>
+                            <option>Class 9</option>
+                            <option>Class 10</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Subject" data-kn="ವಿಷಯ">Subject</label>
+                        <select class="input-field" id="gameSubject">
+                            <option>Mathematics</option>
+                            <option>Science</option>
+                            <option>English</option>
+                            <option>Social Studies</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Topic" data-kn="ವಿಷಯ">Topic</label>
+                        <input type="text" class="input-field" id="gameTopic" placeholder="Enter topic">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Game Type" data-kn="ಆಟದ ಪ್ರಕಾರ">Game Type</label>
+                        <select class="input-field" id="gameType">
+                            <option data-en="Quiz Game" data-kn="ಕ್ವಿಜ್ ಆಟ">Quiz Game</option>
+                            <option data-en="Puzzle" data-kn="ಪಝಲ್">Puzzle</option>
+                            <option data-en="Match the Following" data-kn="ಹೊಂದಾಣಿಕೆ ಮಾಡಿ">Match the Following</option>
+                            <option data-en="Drag and Drop" data-kn="ಡ್ರ್ಯಾಗ್ ಮತ್ತು ಡ್ರಾಪ್">Drag and Drop</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="generateGame()">
+                        <i class="fas fa-play"></i>
+                        <span data-en="Generate Game" data-kn="ಆಟವನ್ನು ರಚಿಸಿ">Generate Game</span>
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Game Preview" data-kn="ಆಟದ ಪೂರ್ವವೀಕ್ಷಣೆ">Game Preview</span>
+                    </h3>
+                    <div id="gamePreview">
+                        <p style="color: var(--text-gray); text-align: center; padding: 40px;">
+                            <span data-en="Generate a game to start playing" data-kn="ಆಡಲು ಪ್ರಾರಂಭಿಸಲು ಆಟವನ್ನು ರಚಿಸಿ">Generate a game to start playing</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory -->
+        <div class="section" id="inventory">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-boxes"></i>
+                <span data-en="Inventory & Mid-Day Meal Management" data-kn="ದಾಸ್ತಾನು ಮತ್ತು ಮಧ್ಯಾಹ್ನ ಊಟ ನಿರ್ವಹಣೆ">Inventory & Mid-Day Meal Management</span>
+            </h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Add Inventory Item" data-kn="ದಾಸ್ತಾನು ಐಟಂ ಸೇರಿಸಿ">Add Inventory Item</span>
+                    </h3>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Item Name" data-kn="ಐಟಂ ಹೆಸರು">Item Name</label>
+                        <input type="text" class="input-field" id="inventoryItem" placeholder="e.g., Benches, Chairs, Bulbs">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Quantity" data-kn="ಪ್ರಮಾಣ">Quantity</label>
+                        <input type="number" class="input-field" id="inventoryQty" placeholder="Enter quantity">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Status" data-kn="ಸ್ಥಿತಿ">Status</label>
+                        <select class="input-field" id="inventoryStatus">
+                            <option data-en="Good Condition" data-kn="ಉತ್ತಮ ಸ್ಥಿತಿ">Good Condition</option>
+                            <option data-en="Needs Repair" data-kn="ದುರಸ್ತಿ ಅಗತ್ಯ">Needs Repair</option>
+                            <option data-en="Damaged" data-kn="ಹಾನಿಗೊಳಗಾಗಿದೆ">Damaged</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="addInventory()">
+                        <i class="fas fa-plus"></i>
+                        <span data-en="Add Item" data-kn="ಐಟಂ ಸೇರಿಸಿ">Add Item</span>
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Mid-Day Meal Report" data-kn="ಮಧ್ಯಾಹ್ನ ಊಟ ವರದಿ">Mid-Day Meal Report</span>
+                    </h3>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Date" data-kn="ದಿನಾಂಕ">Date</label>
+                        <input type="date" class="input-field" id="mealDate">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Meals Served" data-kn="ಊಟಗಳನ್ನು ನೀಡಲಾಗಿದೆ">Meals Served</label>
+                        <input type="number" class="input-field" id="mealsServed" placeholder="Number of meals">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Cost per Meal (₹)" data-kn="ಪ್ರತಿ ಊಟದ ವೆಚ್ಚ (₹)">Cost per Meal (₹)</label>
+                        <input type="number" class="input-field" id="mealCost" placeholder="Cost">
+                    </div>
+                    <div class="stat-value" style="font-size: 24px; margin: 15px 0;">
+                        <span data-en="Total:" data-kn="ಒಟ್ಟು:">Total:</span> ₹<span id="mealTotal">0</span>
+                    </div>
+                    <button class="btn btn-success" onclick="saveMealReport()">
+                        <i class="fas fa-save"></i>
+                        <span data-en="Save Report" data-kn="ವರದಿ ಉಳಿಸಿ">Save Report</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 20px;">
+                    <span data-en="Current Inventory" data-kn="ಪ್ರಸ್ತುತ ದಾಸ್ತಾನು">Current Inventory</span>
+                </h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th data-en="Item" data-kn="ಐಟಂ">Item</th>
+                            <th data-en="Quantity" data-kn="ಪ್ರಮಾಣ">Quantity</th>
+                            <th data-en="Status" data-kn="ಸ್ಥಿತಿ">Status</th>
+                            <th data-en="Action" data-kn="ಕ್ರಿಯೆ">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Benches</td>
+                            <td>120</td>
+                            <td><span class="badge badge-success">Good</span></td>
+                            <td><button class="btn btn-secondary">Update</button></td>
+                        </tr>
+                        <tr>
+                            <td>Chairs</td>
+                            <td>150</td>
+                            <td><span class="badge badge-success">Good</span></td>
+                            <td><button class="btn btn-secondary">Update</button></td>
+                        </tr>
+                        <tr>
+                            <td>Blackboards</td>
+                            <td>15</td>
+                            <td><span class="badge badge-warning">Needs Repair</span></td>
+                            <td><button class="btn btn-secondary">Update</button></td>
+                        </tr>
+                        <tr>
+                            <td>Light Bulbs</td>
+                            <td>85</td>
+                            <td><span class="badge badge-success">Good</span></td>
+                            <td><button class="btn btn-secondary">Update</button></td>
+                        </tr>
+                        <tr>
+                            <td>Water Buckets</td>
+                            <td>40</td>
+                            <td><span class="badge badge-success">Good</span></td>
+                            <td><button class="btn btn-secondary">Update</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Salary & Expenses -->
+        <div class="section" id="salary">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-rupee-sign"></i>
+                <span data-en="Salary & Expense Management" data-kn="ಸಂಬಳ ಮತ್ತು ವೆಚ್ಚ ನಿರ್ವಹಣೆ">Salary & Expense Management</span>
+            </h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-wallet"></i></div>
+                    <h3 style="margin: 15px 0;">
+                        <span data-en="Monthly Budget" data-kn="ಮಾಸಿಕ ಬಜೆಟ್">Monthly Budget</span>
+                    </h3>
+                    <div class="stat-value" style="font-size: 36px;">₹12.5L</div>
+                    <div class="stat-label" data-en="Total Expenses" data-kn="ಒಟ್ಟು ವೆಚ್ಚಗಳು">Total Expenses</div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Expense Breakdown" data-kn="ವೆಚ್ಚ ವಿಭಜನೆ">Expense Breakdown</span>
+                    </h3>
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Salaries</span>
+                            <strong>₹8.5L</strong>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 68%"></div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Infrastructure</span>
+                            <strong>₹2.5L</strong>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 20%"></div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Mid-Day Meal</span>
+                            <strong>₹1.5L</strong>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 12%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 30px;">
+                <h3 style="margin-bottom: 20px;">
+                    <span data-en="Add Expense Entry" data-kn="ವೆಚ್ಚ ನಮೂದನ್ನು ಸೇರಿಸಿ">Add Expense Entry</span>
+                </h3>
+                <div class="dashboard-grid">
+                    <div class="input-group">
+                        <label class="input-label" data-en="Category" data-kn="ವರ್ಗ">Category</label>
+                        <select class="input-field" id="expenseCategory">
+                            <option data-en="Teacher Salary" data-kn="ಶಿಕ್ಷಕರ ಸಂಬಳ">Teacher Salary</option>
+                            <option data-en="Staff Salary" data-kn="ಸಿಬ್ಬಂದಿ ಸಂಬಳ">Staff Salary</option>
+                            <option data-en="Infrastructure" data-kn="ಮೂಲಸೌಕರ್ಯ">Infrastructure</option>
+                            <option data-en="Supplies" data-kn="ಸರಬರಾಜುಗಳು">Supplies</option>
+                            <option data-en="Maintenance" data-kn="ನಿರ್ವಹಣೆ">Maintenance</option>
+                            <option data-en="Mid-Day Meal" data-kn="ಮಧ್ಯಾಹ್ನ ಊಟ">Mid-Day Meal</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Amount (₹)" data-kn="ಮೊತ್ತ (₹)">Amount (₹)</label>
+                        <input type="number" class="input-field" id="expenseAmount" placeholder="Enter amount">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Description" data-kn="ವಿವರಣೆ">Description</label>
+                        <input type="text" class="input-field" id="expenseDesc" placeholder="Enter description">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="addExpense()">
+                    <i class="fas fa-plus"></i>
+                    <span data-en="Add Expense" data-kn="ವೆಚ್ಚ ಸೇರಿಸಿ">Add Expense</span>
+                </button>
+            </div>
+
+            <div class="card" style="margin-top: 30px;">
+                <h3 style="margin-bottom: 20px;">
+                    <span data-en="Monthly Ledger" data-kn="ಮಾಸಿಕ ಲೆಡ್ಜರ್">Monthly Ledger</span>
+                </h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th data-en="Date" data-kn="ದಿನಾಂಕ">Date</th>
+                            <th data-en="Category" data-kn="ವರ್ಗ">Category</th>
+                            <th data-en="Amount" data-kn="ಮೊತ್ತ">Amount</th>
+                            <th data-en="Status" data-kn="ಸ್ಥಿತಿ">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dec 1, 2025</td>
+                            <td>Teacher Salary</td>
+                            <td>₹8,50,000</td>
+                            <td><span class="badge badge-success">Paid</span></td>
+                        </tr>
+                        <tr>
+                            <td>Dec 5, 2025</td>
+                            <td>Infrastructure</td>
+                            <td>₹2,50,000</td>
+                            <td><span class="badge badge-success">Paid</span></td>
+                        </tr>
+                        <tr>
+                            <td>Dec 10, 2025</td>
+                            <td>Mid-Day Meal</td>
+                            <td>₹1,50,000</td>
+                            <td><span class="badge badge-success">Paid</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-primary" style="margin-top: 20px;">
+                    <i class="fas fa-download"></i>
+                    <span data-en="Export Ledger (Excel)" data-kn="ಲೆಡ್ಜರ್ ರಫ್ತು ಮಾಡಿ (Excel)">Export Ledger (Excel)</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Government Reporting -->
+        <div class="section" id="gov-report">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-file-alt"></i>
+                <span data-en="School → Government Reporting" data-kn="ಶಾಲೆ → ಸರ್ಕಾರಿ ವರದಿ">School → Government Reporting</span>
+            </h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Generate Government Report" data-kn="ಸರ್ಕಾರಿ ವರದಿ ರಚಿಸಿ">Generate Government Report</span>
+                    </h3>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Report Type" data-kn="ವರದಿ ಪ್ರಕಾರ">Report Type</label>
+                        <select class="input-field" id="reportType">
+                            <option data-en="Infrastructure Status Report" data-kn="ಮೂಲಸೌಕರ್ಯ ಸ್ಥಿತಿ ವರದಿ">Infrastructure Status Report</option>
+                            <option data-en="Academic Growth Report" data-kn="ಶೈಕ್ಷಣಿಕ ಬೆಳವಣಿಗೆ ವರದಿ">Academic Growth Report</option>
+                            <option data-en="Attendance Statistics" data-kn="ಹಾಜರಾತಿ ಅಂಕಿಅಂಶಗಳು">Attendance Statistics</option>
+                            <option data-en="Budget Utilization Report" data-kn="ಬಜೆಟ್ ಬಳಕೆ ವರದಿ">Budget Utilization Report</option>
+                            <option data-en="Mid-Day Meal Report" data-kn="ಮಧ್ಯಾಹ್ನ ಊಟ ವರದಿ">Mid-Day Meal Report</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" data-en="Period" data-kn="ಅವಧಿ">Period</label>
+                        <select class="input-field" id="reportPeriod">
+                            <option data-en="Monthly" data-kn="ಮಾಸಿಕ">Monthly</option>
+                            <option data-en="Quarterly" data-kn="ತ್ರೈಮಾಸಿಕ">Quarterly</option>
+                            <option data-en="Yearly" data-kn="ವಾರ್ಷಿಕ">Yearly</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="generateGovReport()">
+                        <i class="fas fa-file-pdf"></i>
+                        <span data-en="Generate Report" data-kn="ವರದಿ ರಚಿಸಿ">Generate Report</span>
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">
+                        <span data-en="Recent Reports" data-kn="ಇತ್ತೀಚಿನ ವರದಿಗಳು">Recent Reports</span>
+                    </h3>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="padding: 15px; background: var(--light-bg); border-radius: 10px;">
+                            <strong>Monthly Attendance Report - November 2025</strong>
+                            <p style="font-size: 14px; color: var(--text-gray); margin-top: 5px;">Generated: Dec 1, 2025</p>
+                            <button class="btn btn-secondary" style="margin-top: 10px;">
+                                <i class="fas fa-download"></i> Download PDF
+                            </button>
+                        </div>
+                        <div style="padding: 15px; background: var(--light-bg); border-radius: 10px;">
+                            <strong>Academic Growth Report - Q3 2025</strong>
+                            <p style="font-size: 14px; color: var(--text-gray); margin-top: 5px;">Generated: Nov 30, 2025</p>
+                            <button class="btn btn-secondary" style="margin-top: 10px;">
+                                <i class="fas fa-download"></i> Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tech Learning Hub -->
+        <div class="section" id="tech-hub">
+            <h2 style="margin-bottom: 30px; color: var(--primary);">
+                <i class="fas fa-laptop-code"></i>
+                <span data-en="AI & Technology Learning Hub" data-kn="AI ಮತ್ತು ತಂತ್ರಜ್ಞಾನ ಕಲಿಕಾ ಕೇಂದ್ರ">AI & Technology Learning Hub</span>
+            </h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-robot"></i></div>
+                    <h3 style="margin: 15px 0;">
+                        <span data-en="Latest AI Updates" data-kn="ಇತ್ತೀಚಿನ AI ನವೀಕರಣಗಳು">Latest AI Updates</span>
+                    </h3>
+                    <p style="color: var(--text-gray); margin-bottom: 15px;">
+                        <span data-en="Learn about cutting-edge AI innovations and applications" data-kn="ಅತ್ಯಾಧುನಿಕ AI ನಾವೀನ್ಯತೆಗಳು ಮತ್ತು ಅನ್ವಯಗಳ ಬಗ್ಗೆ ತಿಳಿಯಿರಿ">Learn about cutting-edge AI innovations and applications</span>
+                    </p>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-play"></i>
+                        <span data-en="Start Learning" data-kn="ಕಲಿಕೆ ಪ್ರಾರಂಭಿಸಿ">Start Learning</span>
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-chalkboard"></i></div>
+                    <h3 style="margin: 15px 0;">
+                        <span data-en="Modern Teaching Methods" data-kn="ಆಧುನಿಕ ಬೋಧನಾ ವಿಧಾನಗಳು">Modern Teaching Methods</span>
+                    </h3>
+                    <p style="color: var(--text-gray); margin-bottom: 15px;">
+                        <span data-en="AI-integrated teaching techniques for better learning outcomes" data-kn="ಉತ್ತಮ ಕಲಿಕಾ ಫಲಿತಾಂಶಗಳಿಗಾಗಿ AI-ಸಂಯೋಜಿತ ಬೋಧನಾ ತಂತ್ರಗಳು">AI-integrated teaching techniques for better learning outcomes</span>
+                    </p>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-play"></i>
+                        <span data-en="Start Course" data-kn="ಕೋರ್ಸ್ ಪ್ರಾರಂಭಿಸಿ">Start Course</span>
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-briefcase"></i></div>
+                    <h3 style="margin: 15px 0;">
+                        <span data-en="Career Guidance" data-kn="ವೃತ್ತಿ ಮಾರ್ಗದರ್ಶನ">Career Guidance</span>
+                    </h3>
+                    <p style="color: var(--text-gray); margin-bottom: 15px;">
+                        <span data-en="Explore future career paths and opportunities in technology" data-kn="ತಂತ್ರಜ್ಞಾನದಲ್ಲಿ ಭವಿಷ್ಯದ ವೃತ್ತಿ ಮಾರ್ಗಗಳು ಮತ್ತು ಅವಕಾಶಗಳನ್ನು ಅನ್ವೇಷಿಸಿ">Explore future career paths and opportunities in technology</span>
+                    </p>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-compass"></i>
+                        <span data-en="Explore Careers" data-kn="ವೃತ್ತಿಗಳನ್ನು ಅನ್ವೇಷಿಸಿ">Explore Careers</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <h3 style="margin-bottom: 20px;">
+            <i class="fas fa-bell"></i>
+            <span data-en="Notifications" data-kn="ಅಧಿಸೂಚನೆಗಳು">Notifications</span>
+        </h3>
+        <div class="notification-item">
+            <p><strong data-en="New Assignment Posted" data-kn="ಹೊಸ ಅಸೈನ್‌ಮೆಂಟ್ ಪೋಸ್ಟ್ ಮಾಡಲಾಗಿದೆ">New Assignment Posted</strong></p>
+            <p style="font-size: 14px; color: var(--text-gray);">Mathematics - Chapter 5</p>
+            <p style="font-size: 12px; color: var(--text-gray); margin-top: 5px;">2 hours ago</p>
+        </div>
+        <div class="notification-item">
+            <p><strong data-en="Parent-Teacher Meeting" data-kn="ಪೋಷಕ-ಶಿಕ್ಷಕರ ಸಭೆ">Parent-Teacher Meeting</strong></p>
+            <p style="font-size: 14px; color: var(--text-gray);">Scheduled: Dec 15, 2025</p>
+            <p style="font-size: 12px; color: var(--text-gray); margin-top: 5px;">1 day ago</p>
+        </div>
+        <div class="notification-item">
+            <p><strong data-en="Quiz Results Published" data-kn="ಕ್ವಿಜ್ ಫಲಿತಾಂಶಗಳನ್ನು ಪ್ರಕಟಿಸಲಾಗಿದೆ">Quiz Results Published</strong></p>
+            <p style="font-size: 14px; color: var(--text-gray);">Science Quiz - Score: 92%</p>
+            <p style="font-size: 12px; color: var(--text-gray); margin-top: 5px;">2 days ago</p>
+        </div>
+    </div>
+
+    <!-- Calculator -->
+    <div class="floating-calculator" id="calculator">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3>
+                <i class="fas fa-calculator"></i>
+                <span data-en="Smart Calculator" data-kn="ಸ್ಮಾರ್ಟ್ ಕ್ಯಾಲ್ಕುಲೇಟರ್">Smart Calculator</span>
+            </h3>
+            <i class="fas fa-times" style="cursor: pointer;" onclick="toggleCalculator()"></i>
+        </div>
+        
+        <div class="calc-mode-selector">
+            <div class="calc-mode-btn active" onclick="setCalcMode('basic')" data-en="Basic" data-kn="ಮೂಲ">Basic</div>
+            <div class="calc-mode-btn" onclick="setCalcMode('marks')" data-en="Marks %" data-kn="ಅಂಕಗಳು %">Marks %</div>
+            <div class="calc-mode-btn" onclick="setCalcMode('attendance')" data-en="Attendance" data-kn="ಹಾಜರಾತಿ">Attendance</div>
+            <div class="calc-mode-btn" onclick="setCalcMode('grade')" data-en="Grade" data-kn="ಗ್ರೇಡ್">Grade</div>
+        </div>
+        
+        <div class="calc-display" id="calcDisplay">0</div>
+        
+        <div id="calcBasicMode">
+            <div class="calc-buttons">
+                <div class="calc-btn" onclick="calcInput('7')">7</div>
+                <div class="calc-btn" onclick="calcInput('8')">8</div>
+                <div class="calc-btn" onclick="calcInput('9')">9</div>
+                <div class="calc-btn operator" onclick="calcInput('/')">/</div>
+                <div class="calc-btn" onclick="calcInput('4')">4</div>
+                <div class="calc-btn" onclick="calcInput('5')">5</div>
+                <div class="calc-btn" onclick="calcInput('6')">6</div>
+                <div class="calc-btn operator" onclick="calcInput('*')">×</div>
+                <div class="calc-btn" onclick="calcInput('1')">1</div>
+                <div class="calc-btn" onclick="calcInput('2')">2</div>
+                <div class="calc-btn" onclick="calcInput('3')">3</div>
+                <div class="calc-btn operator" onclick="calcInput('-')">-</div>
+                <div class="calc-btn" onclick="calcInput('0')">0</div>
+                <div class="calc-btn" onclick="calcInput('.')">.</div>
+                <div class="calc-btn operator" onclick="calcEqual()">=</div>
+                <div class="calc-btn operator" onclick="calcInput('+')">+</div>
+                <div class="calc-btn operator" onclick="calcClear()" style="grid-column: span 4;">Clear</div>
+            </div>
+        </div>
+        
+        <div id="calcMarksMode" style="display: none;">
+            <div class="input-group">
+                <label class="input-label">Marks Obtained</label>
+                <input type="number" class="input-field" id="marksObtained" placeholder="Enter marks">
+            </div>
+            <div class="input-group">
+                <label class="input-label">Total Marks</label>
+                <input type="number" class="input-field" id="marksTotal" placeholder="Enter total">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="calculatePercentage()">
+                <i class="fas fa-calculator"></i> Calculate %
+            </button>
+        </div>
+        
+        <div id="calcAttendanceMode" style="display: none;">
+            <div class="input-group">
+                <label class="input-label">Days Present</label>
+                <input type="number" class="input-field" id="daysPresent" placeholder="Enter days">
+            </div>
+            <div class="input-group">
+                <label class="input-label">Total Days</label>
+                <input type="number" class="input-field" id="totalDays" placeholder="Enter total">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="calculateAttendance()">
+                <i class="fas fa-calculator"></i> Calculate %
+            </button>
+        </div>
+        
+        <div id="calcGradeMode" style="display: none;">
+            <div class="input-group">
+                <label class="input-label">Percentage</label>
+                <input type="number" class="input-field" id="gradePercentage" placeholder="Enter %">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="calculateGrade()">
+                <i class="fas fa-calculator"></i> Get Grade
+            </button>
+        </div>
+    </div>
+
+    <!-- FAB -->
+    <div class="fab" onclick="toggleCalculator()">
+        <i class="fas fa-calculator"></i>
+    </div>
+
+    <!-- Alert -->
+    <div class="alert-box" id="alertBox">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-check-circle" style="font-size: 24px; color: var(--success);"></i>
+            <div>
+                <strong id="alertTitle">Success</strong>
+                <p id="alertMessage" style="margin-top: 5px; font-size: 14px;"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'en';
+        let currentRole = '';
+        let selectedRole = '';
+        let calcMode = 'basic';
+
+        function init() {
+            setTodayDate();
+        }
+
+        function setTodayDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelectorAll('input[type="date"]').forEach(input => input.value = today);
+        }
+
+        function translatePage() {
+            document.querySelectorAll('[data-en][data-kn]').forEach(el => {
+                const text = currentLang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-kn');
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.placeholder = text;
+                } else {
+                    el.textContent = text;
+                }
+            });
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'kn' : 'en';
+            document.getElementById('langText').textContent = currentLang === 'en' ? 'English' : 'ಕನ್ನಡ';
+            translatePage();
+            showAlert(currentLang === 'en' ? 'Language changed to English' : 'ಭಾಷೆಯನ್ನು ಕನ್ನಡಕ್ಕೆ ಬದಲಾಯಿಸಲಾಗಿದೆ', 'success');
+        }
+
+        function selectRole(role) {
+            selectedRole = role;
+            document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+        }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!selectedRole || !username || !password) {
+                showAlert('Please fill all fields', 'error');
+                return;
+            }
+
+            currentRole = selectedRole;
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('navbar').style.display = 'flex';
+            document.getElementById('sidebar').style.display = 'block';
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('userName').textContent = username;
+            
+            loadRoleBasedMenu();
+            loadRoleBasedDashboard();
+            showAlert('Login successful!', 'success');
+        }
+
+        function loadRoleBasedMenu() {
+            const menus = {
+                admin: [
+                    { icon: 'home', text: 'Dashboard', textKn: 'ಡ್ಯಾಶ್‌ಬೋರ್ಡ್', section: 'dashboard' },
+                    { icon: 'calendar-check', text: 'Attendance', textKn: 'ಹಾಜರಾತಿ', section: 'attendance' },
+                    { icon: 'chart-line', text: 'Analytics', textKn: 'ವಿಶ್ಲೇಷಣೆ', section: 'analytics' },
+                    { icon: 'book', text: 'Notes Hub', textKn: 'ಟಿಪ್ಪಣಿಗಳು', section: 'notes' },
+                    { icon: 'question-circle', text: 'Quiz', textKn: 'ಕ್ವಿಜ್', section: 'quiz' },
+                    { icon: 'robot', text: 'AI Assistant', textKn: 'AI ಸಹಾಯಕ', section: 'ai-assistant' },
+                    { icon: 'file-alt', text: 'AI Notes', textKn: 'AI ಟಿಪ್ಪಣಿಗಳು', section: 'ai-notes' },
+                    { icon: 'tasks', text: 'Assignments', textKn: 'ಅಸೈನ್‌ಮೆಂಟ್‌ಗಳು', section: 'assignments' },
+                    { icon: 'comments', text: 'Chat', textKn: 'ಚಾಟ್', section: 'chat' },
+                    { icon: 'exclamation-circle', text: 'Helpline', textKn: 'ಸಹಾಯವಾಣಿ', section: 'helpline' },
+                    { icon: 'landmark', text: 'Resources', textKn: 'ಸಂಪನ್ಮೂಲಗಳು', section: 'resources' },
+                    { icon: 'lightbulb', text: 'Multi-Answers', textKn: 'ಬಹು-ಉತ್ತರಗಳು', section: 'multi-answers' },
+                    { icon: 'gamepad', text: 'Games', textKn: 'ಆಟಗಳು', section: 'games' },
+                    { icon: 'boxes', text: 'Inventory', textKn: 'ದಾಸ್ತಾನು', section: 'inventory' },
+                    { icon: 'rupee-sign', text: 'Salary', textKn: 'ಸಂಬಳ', section: 'salary' },
+                    { icon: 'file-alt', text: 'Gov Report', textKn: 'ಸರ್ಕಾರಿ ವರದಿ', section: 'gov-report' },
+                    { icon: 'laptop-code', text: 'Tech Hub', textKn: 'ತಂತ್ರಜ್ಞಾನ', section: 'tech-hub' }
+                ],
+                teacher: [
+                    { icon: 'home', text: 'Dashboard', textKn: 'ಡ್ಯಾಶ್‌ಬೋರ್ಡ್', section: 'dashboard' },
+                    { icon: 'calendar-check', text: 'Attendance', textKn: 'ಹಾಜರಾತಿ', section: 'attendance' },
+                    { icon: 'chart-line', text: 'Analytics', textKn: 'ವಿಶ್ಲೇಷಣೆ', section: 'analytics' },
+                    { icon: 'book', text: 'Notes', textKn: 'ಟಿಪ್ಪಣಿಗಳು', section: 'notes' },
+                    { icon: 'question-circle', text: 'Quiz', textKn: 'ಕ್ವಿಜ್', section: 'quiz' },
+                    { icon: 'robot', text: 'AI Assistant', textKn: 'AI ಸಹಾಯಕ', section: 'ai-assistant' },
+                    { icon: 'file-alt', text: 'AI Notes', textKn: 'AI ಟಿಪ್ಪಣಿಗಳು', section: 'ai-notes' },
+                    { icon: 'tasks', text: 'Assignments', textKn: 'ಅಸೈನ್‌ಮೆಂಟ್‌ಗಳು', section: 'assignments' },
+                    { icon: 'comments', text: 'Chat', textKn: 'ಚಾಟ್', section: 'chat' }
+                ],
+                student: [
+                    { icon: 'home', text: 'Dashboard', textKn: 'ಡ್ಯಾಶ್‌ಬೋರ್ಡ್', section: 'dashboard' },
+                    { icon: 'book', text: 'Notes', textKn: 'ಟಿಪ್ಪಣಿಗಳು', section: 'notes' },
+                    { icon: 'question-circle', text: 'Quizzes', textKn: 'ಕ್ವಿಜ್‌ಗಳು', section: 'quiz' },
+                    { icon: 'robot', text: 'AI Help', textKn: 'AI ಸಹಾಯ', section: 'ai-assistant' },
+                    { icon: 'tasks', text: 'Assignments', textKn: 'ಅಸೈನ್‌ಮೆಂಟ್‌ಗಳು', section: 'assignments' },
+                    { icon: 'comments', text: 'Chat', textKn: 'ಚಾಟ್', section: 'chat' },
+                    { icon: 'exclamation-circle', text: 'Helpline', textKn: 'ಸಹಾಯವಾಣಿ', section: 'helpline' },
+                    { icon: 'landmark', text: 'Resources', textKn: 'ಸಂಪನ್ಮೂಲಗಳು', section: 'resources' },
+                    { icon: 'lightbulb', text: 'Multi-Answers', textKn: 'ಬಹು-ಉತ್ತರಗಳು', section: 'multi-answers' },
+                    { icon: 'gamepad', text: 'Games', textKn: 'ಆಟಗಳು', section: 'games' }
+                ]
+            };
+
+            const menu = menus[currentRole] || menus.student;
+            let menuHTML = '<div class="menu-section-title">Main Menu</div>';
+            menu.forEach((item, i) => {
+                menuHTML += `
+                    <div class="menu-item ${i === 0 ? 'active' : ''}" onclick="showSection('${item.section}')">
+                        <i class="fas fa-${item.icon}"></i>
+                        <span data-en="${item.text}" data-kn="${item.textKn}">${item.text}</span>
+                    </div>
+                `;
+            });
+            document.getElementById('sidebarMenu').innerHTML = menuHTML;
+            translatePage();
+        }
+
+        function loadRoleBasedDashboard() {
+            const dashboards = {
+                student: `
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="card-icon"><i class="fas fa-calendar-check"></i></div>
+                                    <span data-en="Attendance" data-kn="ಹಾಜರಾತಿ">Attendance</span>
+                                </div>
+                            </div>
+                            <div class="stat-value">92%</div>
+                            <div class="stat-label" data-en="This Month" data-kn="ಈ ತಿಂಗಳು">This Month</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="card-icon"><i class="fas fa-star"></i></div>
+                                    <span data-en="Overall Grade" data-kn="ಒಟ್ಟು ಗ್ರೇಡ್">Overall Grade</span>
+                                </div>
+                            </div>
+                            <div class="stat-value">A+</div>
+                            <div class="stat-label" data-en="Current Semester" data-kn="ಪ್ರಸ್ತುತ ಸೆಮಿಸ್ಟರ್">Current Semester</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="card-icon"><i class="fas fa-tasks"></i></div>
+                                    <span data-en="Assignments" data-kn="ಅಸೈನ್‌ಮೆಂಟ್‌ಗಳು">Assignments</span>
+                                </div>
+                            </div>
+                            <div class="stat-value">8/10</div>
+                            <div class="stat-label" data-en="Completed" data-kn="ಪೂರ್ಣಗೊಂಡಿದೆ">Completed</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="card-icon"><i class="fas fa-trophy"></i></div>
+                                    <span data-en="Achievements" data-kn="ಸಾಧನೆಗಳು">Achievements</span>
+                                </div>
+                            </div>
+                            <div class="stat-value">24</div>
+                            <div class="stat-label" data-en="Badges Earned" data-kn="ಬ್ಯಾಡ್ಜ್‌ಗಳು ಗಳಿಸಿದೆ">Badges Earned</div>
+                        </div>
+                    </div>
+                `,
+                teacher: `
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-users"></i></div>
+                            <div class="stat-value">156</div>
+                            <div class="stat-label" data-en="Total Students" data-kn="ಒಟ್ಟು ವಿದ್ಯಾರ್ಥಿಗಳು">Total Students</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-calendar-check"></i></div>
+                            <div class="stat-value">94%</div>
+                            <div class="stat-label" data-en="Attendance Today" data-kn="ಇಂದಿನ ಹಾಜರಾತಿ">Attendance Today</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-file-alt"></i></div>
+                            <div class="stat-value">12</div>
+                            <div class="stat-label" data-en="Pending Evaluations" data-kn="ಬಾಕಿ ಮೌಲ್ಯಮಾಪನಗಳು">Pending Evaluations</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-book"></i></div>
+                            <div class="stat-value">45</div>
+                            <div class="stat-label" data-en="Notes Uploaded" data-kn="ಟಿಪ್ಪಣಿಗಳು ಅಪ್‌ಲೋಡ್">Notes Uploaded</div>
+                        </div>
+                    </div>
+                `,
+                admin: `
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-users"></i></div>
+                            <div class="stat-value">1,245</div>
+                            <div class="stat-label" data-en="Total Students" data-kn="ಒಟ್ಟು ವಿದ್ಯಾರ್ಥಿಗಳು">Total Students</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                            <div class="stat-value">48</div>
+                            <div class="stat-label" data-en="Total Teachers" data-kn="ಒಟ್ಟು ಶಿಕ್ಷಕರು">Total Teachers</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-rupee-sign"></i></div>
+                            <div class="stat-value">₹8.5L</div>
+                            <div class="stat-label" data-en="Monthly Budget" data-kn="ಮಾಸಿಕ ಬಜೆಟ್">Monthly Budget</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-building"></i></div>
+                            <div class="stat-value">95%</div>
+                            <div class="stat-label" data-en="Infrastructure" data-kn="ಮೂಲಸೌಕರ್ಯ">Infrastructure</div>
+                        </div>
+                    </div>
+                `
+            };
+            document.getElementById('dashboardContent').innerHTML = dashboards[currentRole] || dashboards.student;
+            translatePage();
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+            document.getElementById('sidebarIcon').className = sidebar.classList.contains('collapsed') ? 'fas fa-chevron-right' : 'fas fa-chevron-left';
+        }
+
+        function toggleNotifications() {
+            document.getElementById('notificationPanel').classList.toggle('active');
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        function showAlert(message, type = 'success') {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.className = 'alert-box show ' + type;
+            document.getElementById('alertMessage').textContent = message;
+            setTimeout(() => alertBox.classList.remove('show'), 3000);
+        }
+
+        function loadAttendance() {
+            const students = [
+                { roll: '001', name: 'Rahul Kumar', status: 'present' },
+                { roll: '002', name: 'Priya Sharma', status: 'present' },
+                { roll: '003', name: 'Amit Patel', status: 'absent' },
+                { roll: '004', name: 'Sneha Reddy', status: 'present' },
+                { roll: '005', name: 'Vikram Singh', status: 'present' },
+                { roll: '006', name: 'Anjali Gupta', status: 'present' },
+                { roll: '007', name: 'Rohan Verma', status: 'absent' },
+                { roll: '008', name: 'Kavya Nair', status: 'present' }
+            ];
+
+            const tbody = document.getElementById('attendanceTableBody');
+            tbody.innerHTML = students.map(s => `
+                <tr>
+                    <td>${s.roll}</td>
+                    <td>${s.name}</td>
+                    <td><span class="badge badge-${s.status === 'present' ? 'success' : 'danger'}">${s.status === 'present' ? 'Present' : 'Absent'}</span></td>
+                    <td><button class="btn btn-secondary" onclick="toggleAttendanceStatus(this)">Toggle</button></td>
+                </tr>
+            `).join('');
+
+            document.getElementById('attendanceTableContainer').style.display = 'block';
+            
+            // Create attendance charts
+            createAttendanceCharts();
+            showAlert('Students loaded successfully', 'success');
+        }
+
+        function createAttendanceCharts() {
+            // Attendance Overview Chart
+            const ctx1 = document.getElementById('attendanceChart');
+            if (ctx1) {
+                new Chart(ctx1, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Present', 'Absent'],
+                        datasets: [{
+                            data: [75, 25],
+                            backgroundColor: ['#10b981', '#ef4444']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Attendance Trend Chart
+            const ctx2 = document.getElementById('attendanceTrendChart');
+            if (ctx2) {
+                new Chart(ctx2, {
+                    type: 'line',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                        datasets: [{
+                            label: 'Attendance %',
+                            data: [88, 92, 90, 94],
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+        }
+
+        function toggleAttendanceStatus(btn) {
+            const badge = btn.parentElement.previousElementSibling.querySelector('.badge');
+            if (badge.classList.contains('badge-success')) {
+                badge.classList.remove('badge-success');
+                badge.classList.add('badge-danger');
+                badge.textContent = 'Absent';
+            } else {
+                badge.classList.remove('badge-danger');
+                badge.classList.add('badge-success');
+                badge.textContent = 'Present';
+            }
+        }
+
+        function saveAttendance() {
+            showAlert('Attendance saved! SMS alerts sent to parents of absent students.', 'success');
+        }
+
+        function loadAnalytics() {
+            // Progress Chart
+            const ctx1 = document.getElementById('progressChart');
+            if (ctx1) {
+                new Chart(ctx1, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Overall Performance',
+                            data: [75, 78, 82, 85, 87, 90],
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            // Subject Chart
+            const ctx2 = document.getElementById('subjectChart');
+            if (ctx2) {
+                new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Math', 'Science', 'English', 'Social'],
+                        datasets: [{
+                            label: 'Marks (%)',
+                            data: [92, 88, 85, 90],
+                            backgroundColor: ['#2563eb', '#7c3aed', '#f59e0b', '#10b981']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            // Attendance vs Performance Chart
+            const ctx3 = document.getElementById('attendancePerformanceChart');
+            if (ctx3) {
+                new Chart(ctx3, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: 'Students',
+                            data: [
+                                {x: 95, y: 92},
+                                {x: 88, y: 85},
+                                {x: 92, y: 90},
+                                {x: 85, y: 82},
+                                {x: 90, y: 88}
+                            ],
+                            backgroundColor: '#2563eb'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Attendance %'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Performance %'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            showAlert('Analytics loaded with charts', 'success');
+        }
+
+        function downloadReportCard() {
+            showAlert('Report card PDF generated and downloaded!', 'success');
+        }
+
+        function uploadNotes(input) {
+            if (input.files && input.files[0]) {
+                document.getElementById('notesUploadStatus').innerHTML = `
+                    <div class="generated-content" style="margin-top: 20px;">
+                        <i class="fas fa-check-circle" style="color: var(--success); font-size: 24px;"></i>
+                        <p style="margin-top: 10px;"><strong>Notes Uploaded Successfully!</strong></p>
+                        <p style="font-size: 14px; color: var(--text-gray);">${input.files[0].name}</p>
+                    </div>
+                `;
+                showAlert('Notes uploaded successfully', 'success');
+            }
+        }
+
+        function browseNotes() {
+            document.getElementById('notesResults').innerHTML = `
+                <div class="generated-content">
+                    <h4 style="margin-bottom: 15px;">Available Notes</h4>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="padding: 15px; background: var(--light-bg); border-radius: 10px; cursor: pointer;">
+                            <strong>Chapter 1: Introduction to Algebra</strong>
+                            <p style="font-size: 14px; color: var(--text-gray); margin-top: 5px;">PDF • 2.5 MB • Uploaded 2 days ago</p>
+                            <button class="btn btn-secondary" style="margin-top: 10px;">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                        <div style="padding: 15px; background: var(--light-bg); border-radius: 10px; cursor: pointer;">
+                            <strong>Chapter 2: Linear Equations</strong>
+                            <p style="font-size: 14px; color: var(--text-gray); margin-top: 5px;">PDF • 3.1 MB • Uploaded 5 days ago</p>
+                            <button class="btn btn-secondary" style="margin-top: 10px;">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                        <div style="padding: 15px; background: var(--light-bg); border-radius: 10px; cursor: pointer;">
+                            <strong>Chapter 3: Quadratic Equations</strong>
+                            <p style="font-size: 14px; color: var(--text-gray); margin-top: 5px;">DOCX • 1.8 MB • Uploaded 1 week ago</p>
+                            <button class="btn btn-secondary" style="margin-top: 10px;">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            showAlert('Notes loaded successfully', 'success');
+        }
+
+        function handleQuizFile(input) {
+            if (input.files && input.files[0]) {
+                showAlert('PDF uploaded. Configure quiz settings and click Generate.', 'success');
+            }
+        }
+
+        function generateQuiz() {
+            const numQ = document.getElementById('quizQuestions').value;
+            const numOpt = document.getElementById('quizOptions').value;
+            const diff = document.getElementById('quizDifficulty').value;
+            
+            const preview = document.getElementById('quizPreview');
+            preview.innerHTML = '<div class="loading"></div>';
+            
+            setTimeout(() => {
+                let html = '<div class="generated-content"><h4 style="margin-bottom: 20px;">AI Generated Quiz - ' + diff + '</h4>';
+                
+                for (let i = 1; i <= Math.min(numQ, 5); i++) {
+                    html += `
+                        <div class="quiz-card">
+                            <div class="quiz-question">Question ${i}: What is the main concept of this topic?</div>
+                            <div class="quiz-options">
+                    `;
+                    
+                    for (let j = 1; j <= numOpt; j++) {
+                        html += `<div class="quiz-option">${String.fromCharCode(64 + j)}) Sample answer option ${j}</div>`;
+                    }
+                    
+                    html += `</div></div>`;
+                }
+                
+                html += `
+                    <button class="btn btn-primary" style="margin-top: 15px;">
+                        <i class="fas fa-download"></i> Download PDF
+                    </button>
+                    <button class="btn btn-secondary" style="margin-left: 10px;">
+                        <i class="fas fa-share"></i> Share Online
+                    </button>
+                </div>`;
+                
+                preview.innerHTML = html;
+                showAlert('Quiz generated successfully!', 'success');
+            }, 1500);
+        }
+
+        function sendAIChat() {
+            const input = document.getElementById('aiChatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            
+            const chat = document.getElementById('aiChatMessages');
+            chat.innerHTML += `
+                <div class="chat-message user">
+                    <div class="chat-avatar"><i class="fas fa-user"></i></div>
+                    <div class="chat-bubble">${msg}</div>
+                </div>
+            `;
+            input.value = '';
+            chat.scrollTop = chat.scrollHeight;
+            
+            setTimeout(() => {
+                const responses = [
+                    "Great question! Let me explain this concept step by step...",
+                    "I understand your doubt. Here's a detailed explanation with examples...",
+                    "That's an interesting topic! Let me break it down for you in simple terms...",
+                    "Excellent question! Here's what you need to know about this concept..."
+                ];
+                chat.innerHTML += `
+                    <div class="chat-message">
+                        <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+                        <div class="chat-bubble">${responses[Math.floor(Math.random() * responses.length)]}</div>
+                    </div>
+                `;
+                chat.scrollTop = chat.scrollHeight;
+            }, 1000);
+        }
+
+        function handleAIChatEnter(e) {
+            if (e.key === 'Enter') sendAIChat();
+        }
+
+        function generateAINotes() {
+            const topic = document.getElementById('aiNotesTopic').value;
+            if (!topic) {
+                showAlert('Please enter a topic', 'error');
+                return;
+            }
+            
+            document.getElementById('aiNotesOutput').innerHTML = '<div class="loading"></div>';
+            
+            setTimeout(() => {
+                document.getElementById('aiNotesOutput').innerHTML = `
+                    <div class="generated-content">
+                        <h4 style="margin-bottom: 15px;">AI Generated Notes - ${topic}</h4>
+                        <p style="margin-bottom: 10px;"><strong>Introduction:</strong></p>
+                        <p style="line-height: 1.6; margin-bottom: 15px;">
+                            ${topic} is a fundamental concept that plays a crucial role in understanding the subject. 
+                            This comprehensive guide covers all essential aspects with detailed explanations and examples.
+                        </p>
+                        <p style="margin-bottom: 10px;"><strong>Key Points:</strong></p>
+                        <ul style="margin-left: 20px; line-height: 1.8;">
+                            <li>Understanding basic principles and definitions</li>
+                            <li>Real-world applications and practical examples</li>
+                            <li>Important formulas and theorems</li>
+                            <li>Practice problems with step-by-step solutions</li>
+                        </ul>
+                        <button class="btn btn-primary" style="margin-top: 15px;">
+                            <i class="fas fa-download"></i> Download PDF
+                        </button>
+                    </div>
+                `;
+                showAlert('Notes generated successfully!', 'success');
+            }, 1500);
+        }
+
+        function startVoiceInput() {
+            showAlert('Voice input activated. Speak your questions...', 'success');
+            // Voice recognition would be implemented here
+        }
+
+        function generateQuestionPaper() {
+            showAlert('Question paper generated and formatted!', 'success');
+        }
+
+        function postAssignment() {
+            showAlert('Assignment posted to all students!', 'success');
+        }
+
+        function startTeacherChat() {
+            const teacher = document.getElementById('chatTeacher').value;
+            document.getElementById('teacherChatMessages').innerHTML = `
+                <div class="chat-message">
+                    <div class="chat-avatar"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <div class="chat-bubble">Hello! How can I help you today?</div>
+                </div>
+            `;
+            showAlert('Chat started with ' + teacher.split(' - ')[0], 'success');
+        }
+
+        function sendTeacherChat() {
+            const input = document.getElementById('teacherChatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            
+            const chat = document.getElementById('teacherChatMessages');
+            chat.innerHTML += `
+                <div class="chat-message user">
+                    <div class="chat-avatar"><i class="fas fa-user"></i></div>
+                    <div class="chat-bubble">${msg}</div>
+                </div>
+            `;
+            input.value = '';
+            
+            setTimeout(() => {
+                chat.innerHTML += `
+                    <div class="chat-message">
+                        <div class="chat-avatar"><i class="fas fa-chalkboard-teacher"></i></div>
+                        <div class="chat-bubble">Thank you for your question. Let me help you with that...</div>
+                    </div>
+                `;
+            }, 1000);
+        }
+
+        function submitComplaint() {
+            const type = document.getElementById('issueType').value;
+            const desc = document.getElementById('issueDescription').value;
+            
+            if (!desc) {
+                showAlert('Please describe the issue', 'error');
+                return;
+            }
+            
+            showAlert('Complaint submitted successfully. Authorities have been notified.', 'success');
+            document.getElementById('issueDescription').value = '';
+        }
+
+        function loadGovernmentResources() {
+            document.getElementById('governmentResourcesContainer').innerHTML = `
+                <h3 style="margin-bottom: 20px; color: var(--text-dark);">
+                    <span data-en="All Resources in One Place" data-kn="ಎಲ್ಲಾ ಸಂಪನ್ಮೂಲಗಳು ಒಂದೇ ಸ್ಥಳದಲ್ಲಿ">All Resources in One Place</span>
+                </h3>
+                <div class="dashboard-grid">
+                    <div class="resource-card" onclick="openResource('DIKSHA')">
+                        <div class="resource-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div>
+                            <h4>DIKSHA Platform</h4>
+                            <p style="font-size: 14px; color: var(--text-gray);">Digital learning resources and e-content</p>
+                        </div>
+                    </div>
+                    <div class="resource-card" onclick="openResource('NCERT')">
+                        <div class="resource-icon"><i class="fas fa-book-open"></i></div>
+                        <div>
+                            <h4>NCERT Resources</h4>
+                            <p style="font-size: 14px; color: var(--text-gray);">Official textbooks and study materials</p>
+                        </div>
+                    </div>
+                    <div class="resource-card" onclick="openResource('SWAYAM')">
+                        <div class="resource-icon"><i class="fas fa-video"></i></div>
+                        <div>
+                            <h4>SWAYAM Courses</h4>
+                            <p style="font-size: 14px; color: var(--text-gray);">Online video lectures and courses</p>
+                        </div>
+                    </div>
+                    <div class="resource-card" onclick="openResource('NPTEL')">
+                        <div class="resource-icon"><i class="fas fa-laptop-code"></i></div>
+                        <div>
+                            <h4>NPTEL Content</h4>
+                            <p style="font-size: 14px; color: var(--text-gray);">Technical and engineering resources</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            showAlert('All government resources loaded!', 'success');
+        }
+
+        function openResource(platform) {
+            showAlert(`Opening ${platform} platform with selected parameters...`, 'success');
+        }
+
+        function generateMultiAnswers() {
+            const question = document.getElementById('multiAnswerQuestion').value;
+            if (!question) {
+                showAlert('Please enter a question', 'error');
+                return;
+            }
+            
+            document.getElementById('multiAnswersOutput').innerHTML = `
+                <div class="generated-content">
+                    <h4 style="margin-bottom: 20px;">Multiple Perspectives on Your Question</h4>
+                    
+                    <div style="margin-bottom: 25px; padding: 20px; background: var(--light-bg); border-radius: 10px;">
+                        <strong style="color: var(--primary);">1. NCERT / Textbook Style:</strong>
+                        <p style="margin-top: 10px; line-height: 1.6;">
+                            This is a formal, structured explanation following the official curriculum guidelines. 
+                            It includes definitions, key concepts, and standard examples as per NCERT standards.
+                        </p>
+                    </div>
+                    
+                    <div style="margin-bottom: 25px; padding: 20px; background: var(--light-bg); border-radius: 10px;">
+                        <strong style="color: var(--secondary);">2. Conceptual Explanation:</strong>
+                        <p style="margin-top: 10px; line-height: 1.6;">
+                            This approach focuses on deep understanding of the underlying concepts. 
+                            It explains WHY things work the way they do, building intuition and logical thinking.
+                        </p>
+                    </div>
+                    
+                    <div style="margin-bottom: 25px; padding: 20px; background: var(--light-bg); border-radius: 10px;">
+                        <strong style="color: var(--accent);">3. Exam-Oriented Method:</strong>
+                        <p style="margin-top: 10px; line-height: 1.6;">
+                            Quick, efficient answer format perfect for exams. Includes key points, 
+                            important formulas, and common exam patterns to maximize your score.
+                        </p>
+                    </div>
+                    
+                    <div style="margin-bottom: 25px; padding: 20px; background: var(--light-bg); border-radius: 10px;">
+                        <strong style="color: var(--success);">4. Intuitive / Logical Explanation:</strong>
+                        <p style="margin-top: 10px; line-height: 1.6;">
+                            Simple, easy-to-understand explanation using everyday examples and analogies. 
+                            Makes complex topics accessible and relatable.
+                        </p>
+                    </div>
+                    
+                    <div style="padding: 20px; background: var(--light-bg); border-radius: 10px;">
+                        <strong style="color: var(--danger);">5. Short Revision Answer:</strong>
+                        <p style="margin-top: 10px; line-height: 1.6;">
+                            Quick summary for last-minute revision. Covers all essential points in brief, 
+                            perfect for quick review before exams.
+                        </p>
+                    </div>
+                </div>
+            `;
+            showAlert('Multiple explanations generated!', 'success');
+        }
+
+        function generateGame() {
+            const topic = document.getElementById('gameTopic').value;
+            const gameType = document.getElementById('gameType').value;
+            
+            if (!topic) {
+                showAlert('Please enter a topic', 'error');
+                return;
+            }
+            
+            document.getElementById('gamePreview').innerHTML = '<div class="loading"></div>';
+            
+            setTimeout(() => {
+                document.getElementById('gamePreview').innerHTML = `
+                    <div class="generated-content">
+                        <h4 style="margin-bottom: 15px;">${gameType} - ${topic}</h4>
+                        <div style="background: rgba(37, 99, 235, 0.1); padding: 40px; border-radius: 15px; text-align: center;">
+                            <i class="fas fa-trophy" style="font-size: 64px; color: var(--warning);"></i>
+                            <p style="margin-top: 20px; font-size: 18px; font-weight: 600;">Game Ready to Play!</p>
+                            <p style="margin-top: 10px; color: var(--text-gray);">Score: 0 | Level: 1 | Lives: 3</p>
+                            <button class="btn btn-primary" style="margin-top: 20px;">
+                                <i class="fas fa-play"></i> Start Playing
+                            </button>
+                        </div>
+                    </div>
+                `;
+                showAlert('Learning game generated!', 'success');
+            }, 1500);
+        }
+
+        function addInventory() {
+            const item = document.getElementById('inventoryItem').value;
+            const qty = document.getElementById('inventoryQty').value;
+            
+            if (!item || !qty) {
+                showAlert('Please fill all fields', 'error');
+                return;
+            }
+            
+            showAlert('Inventory item added successfully', 'success');
+            document.getElementById('inventoryItem').value = '';
+            document.getElementById('inventoryQty').value = '';
+        }
+
+        function saveMealReport() {
+            const meals = document.getElementById('mealsServed').value;
+            const cost = document.getElementById('mealCost').value;
+            
+            if (!meals || !cost) {
+                showAlert('Please fill all fields', 'error');
+                return;
+            }
+            
+            const total = meals * cost;
+            document.getElementById('mealTotal').textContent = total.toLocaleString();
+            showAlert('Mid-day meal report saved successfully', 'success');
+        }
+
+        function addExpense() {
+            const amount = document.getElementById('expenseAmount').value;
+            const desc = document.getElementById('expenseDesc').value;
+            
+            if (!amount || !desc) {
+                showAlert('Please fill all fields', 'error');
+                return;
+            }
+            
+            showAlert('Expense entry added to ledger', 'success');
+            document.getElementById('expenseAmount').value = '';
+            document.getElementById('expenseDesc').value = '';
+        }
+
+        function generateGovReport() {
+            const type = document.getElementById('reportType').value;
+            const period = document.getElementById('reportPeriod').value;
+            
+            showAlert(`${period} ${type} generated successfully!`, 'success');
+        }
+
+        // Calculator Functions
+        let calcValue = '0';
+
+        function toggleCalculator() {
+            document.getElementById('calculator').classList.toggle('active');
+        }
+
+        function setCalcMode(mode) {
+            calcMode = mode;
+            document.querySelectorAll('.calc-mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            document.getElementById('calcBasicMode').style.display = mode === 'basic' ? 'block' : 'none';
+            document.getElementById('calcMarksMode').style.display = mode === 'marks' ? 'block' : 'none';
+            document.getElementById('calcAttendanceMode').style.display = mode === 'attendance' ? 'block' : 'none';
+            document.getElementById('calcGradeMode').style.display = mode === 'grade' ? 'block' : 'none';
+            
+            calcClear();
+        }
+
+        function calcInput(v) {
+            calcValue = calcValue === '0' && v !== '.' ? v : calcValue + v;
+            document.getElementById('calcDisplay').textContent = calcValue;
+        }
+
+        function calcClear() {
+            calcValue = '0';
+            document.getElementById('calcDisplay').textContent = calcValue;
+        }
+
+        function calcEqual() {
+            try {
+                calcValue = eval(calcValue).toString();
+                document.getElementById('calcDisplay').textContent = calcValue;
+            } catch (e) {
+                calcValue = 'Error';
+                document.getElementById('calcDisplay').textContent = calcValue;
+                setTimeout(calcClear, 1500);
+            }
+        }
+
+        function calculatePercentage() {
+            const obtained = document.getElementById('marksObtained').value;
+            const total = document.getElementById('marksTotal').value;
+            
+            if (!obtained || !total) {
+                showAlert('Please enter both values', 'error');
+                return;
+            }
+            
+            const percentage = ((obtained / total) * 100).toFixed(2);
+            document.getElementById('calcDisplay').textContent = percentage + '%';
+            showAlert('Percentage calculated!', 'success');
+        }
+
+        function calculateAttendance() {
+            const present = document.getElementById('daysPresent').value;
+            const total = document.getElementById('totalDays').value;
+            
+            if (!present || !total) {
+                showAlert('Please enter both values', 'error');
+                return;
+            }
+            
+            const percentage = ((present / total) * 100).toFixed(2);
+            document.getElementById('calcDisplay').textContent = percentage + '%';
+            showAlert('Attendance calculated!', 'success');
+        }
+
+        function calculateGrade() {
+            const percentage = document.getElementById('gradePercentage').value;
+            
+            if (!percentage) {
+                showAlert('Please enter percentage', 'error');
+                return;
+            }
+            
+            let grade = '';
+            if (percentage >= 90) grade = 'A+';
+            else if (percentage >= 80) grade = 'A';
+            else if (percentage >= 70) grade = 'B+';
+            else if (percentage >= 60) grade = 'B';
+            else if (percentage >= 50) grade = 'C';
+            else grade = 'D';
+            
+            document.getElementById('calcDisplay').textContent = grade;
+            showAlert('Grade calculated!', 'success');
+        }
+
+        // Auto-calculate meal total
+        document.addEventListener('input', function(e) {
+            if (e.target.id === 'mealsServed' || e.target.id === 'mealCost') {
+                const meals = document.getElementById('mealsServed').value || 0;
+                const cost = document.getElementById('mealCost').value || 0;
+                document.getElementById('mealTotal').textContent = (meals * cost).toLocaleString();
+            }
+        });
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
